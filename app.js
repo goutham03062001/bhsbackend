@@ -11,13 +11,24 @@ const PushTokenRouter = require("./routers/PushToken");
 const EventNotification = require("./routers/EventNotification");
 const bot = require("./routers/bot");
 const qrcode = require("qrcode-terminal");
+const http = require("http");
+const socketIO = require("socket.io");
+const server = http.createServer(app);
+const io = socketIO(server, { path: '/socket.io', cors: { origin: "http://localhost:3000" } });
+
 
 const cors = require("cors"); 
 const port = 7000;
 
 app.use(express.json());
 app.use(express.urlencoded({extended:false}))
-app.use(cors());
+app.use(cors(
+  {
+    origin: "http://localhost:3000",
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true,
+  }
+));
 app.use("/api/Auth",AuthRouter);
 app.use("/api/Student",StudentRouter);
 // app.use("/api/bot/sendAbsentMessage",bot);
@@ -79,9 +90,11 @@ app.post("/api/bot/sendAbsentMessage/ok",async(req,res)=>{
 });
 
 
-client.on("qr", (qr) => {
+client.on("qr", (qr,qrCodeUrl) => {
     console.log("QR RECEIVED", qr);
+    console.log("Qr url - ",qrCodeUrl)
     qrcode.generate(qr, { small: true });
+    io.emit("qrCode",{qr});
   });
 
 client.on('qr', (qrCode) => {
@@ -96,5 +109,5 @@ client.on('qr', (qrCode) => {
   client.initialize();
  
   
-  app.listen(port,()=>{console.log("Server running is on : "+port)});
+  server.listen(port,()=>{console.log("Server running is on : "+port)});
  
