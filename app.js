@@ -14,7 +14,7 @@ const qrcode = require("qrcode-terminal");
 const http = require("http");
 const socketIO = require("socket.io");
 const server = http.createServer(app);
-const io = socketIO(server, { path: '/socket.io', cors: { origin: "http://localhost:3000" } });
+const io = socketIO(server, { path: '/socket.io', cors: { origin: "https://bhsmanagement.netlify.app" } });
 
 
 const cors = require("cors"); 
@@ -24,7 +24,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended:false}))
 app.use(cors(
   {
-    origin: "http://localhost:3000",
+    origin: "https://bhsmanagement.netlify.app",
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
   }
