@@ -14,7 +14,7 @@ const qrcode = require("qrcode-terminal");
 const http = require("http");
 const socketIO = require("socket.io");
 const server = http.createServer(app);
-const io = socketIO(server, { path: '/socket.io', cors: { origin: "https://bhsmanagement.netlify.app" } });
+const io = socketIO(server, { path: '/socket.io', cors: { origin: "https://bhsmanagement.netlify.app/" } });
 
 
 const cors = require("cors"); 
@@ -24,7 +24,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended:false}))
 app.use(cors(
   {
-    origin: "https://bhsmanagement.netlify.app",
+    origin: "https://bhsmanagement.netlify.app/",
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
   }
@@ -104,6 +104,7 @@ client.on('qr', (qrCode) => {
   // Listen for ready event
   client.on('ready', () => {
     console.log('WhatsApp client is ready');
+    io.emit("wbReady",{message:"whatsApp web is ready to send messages!"})
   });
   
   client.initialize();
