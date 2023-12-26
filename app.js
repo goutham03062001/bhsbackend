@@ -15,7 +15,7 @@ const http = require("http");
 const socketIO = require("socket.io");
 const server = http.createServer(app);
 const DEV_URL = "http://localhost:3000";
-const PROD_URL = "https://bhsmanagement.netlify.app/";
+const PROD_URL = "https://bhsmanagement.netlify.app";
 var CURR_URL;
 if(process.env.NODE_ENV ==="production"){
   CURR_URL= PROD_URL;
@@ -32,9 +32,10 @@ const port = 7000;
 app.use(express.json());
 app.use(express.urlencoded({extended:false}))
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', CURR_URL);
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+
   next();
 });
 app.use("/api/Auth",AuthRouter);
