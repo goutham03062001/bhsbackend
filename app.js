@@ -31,13 +31,12 @@ const port = 7000;
 
 app.use(express.json());
 app.use(express.urlencoded({extended:false}))
-app.use(cors(
-  {
-    origin:CURR_URL,
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  credentials: true,
-  }
-));
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', CURR_URL);
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  next();
+});
 app.use("/api/Auth",AuthRouter);
 app.use("/api/Student",StudentRouter);
 // app.use("/api/bot/sendAbsentMessage",bot);
